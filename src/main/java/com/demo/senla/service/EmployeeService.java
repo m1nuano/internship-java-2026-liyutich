@@ -3,6 +3,7 @@ package com.demo.senla.service;
 import com.demo.senla.dto.EmployeeDto;
 import com.demo.senla.entity.Department;
 import com.demo.senla.entity.Employee;
+import com.demo.senla.mapping.EmployeeMapper;
 import com.demo.senla.repository.DepartmentRepository;
 import com.demo.senla.repository.EmployeeRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,38 +20,34 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
+    private final EmployeeMapper employeeMapper;
 
     @Transactional(readOnly = true)
     public List<EmployeeDto> findAll() {
-        List<Employee> employees = employeeRepository.findAll();
-        List<EmployeeDto> result = new ArrayList<>();
-
-        for (Employee employee : employees) {
-            result.add(toDto(employee));
-        }
-
-        return result;
+        return employeeRepository.findAll()
+                .stream()
+                .map(employeeMapper::toDto)
+                .toList();
     }
 
     @Transactional(readOnly = true)
     public EmployeeDto findById(Long id) {
-        return toDto(findEntity(id));
+        return employeeMapper.toDto(findEntity(id));
     }
 
     public EmployeeDto create(EmployeeDto dto) {
-        Employee employee = new Employee();
-        fillEmployee(employee, dto);
+        Employee employee = employeeMapper.toEntity(dto);
+        setDepartment(employee, dto.departmentId());
 
-        Employee savedEmployee = employeeRepository.save(employee);
-        return toDto(savedEmployee);
+        return employeeMapper.toDto(employeeRepository.save(employee));
     }
 
     public EmployeeDto update(Long id, EmployeeDto dto) {
         Employee employee = findEntity(id);
-        fillEmployee(employee, dto);
+        employeeMapper.updateEntity(dto, employee);
+        setDepartment(employee, dto.departmentId());
 
-        Employee savedEmployee = employeeRepository.save(employee);
-        return toDto(savedEmployee);
+        return employeeMapper.toDto(employeeRepository.save(employee));
     }
 
     public void delete(Long id) {
@@ -64,33 +60,14 @@ public class EmployeeService {
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found: " + id));
     }
 
-    private void fillEmployee(Employee employee, EmployeeDto dto) {
-        employee.setFullName(dto.getFullName());
-        employee.setEmail(dto.getEmail());
-        employee.setPosition(dto.getPosition());
-        employee.setHireDate(dto.getHireDate());
-
-        if (dto.getDepartmentId() == null) {
+    private void setDepartment(Employee employee, Long departmentId) {
+        if (departmentId == null) {
             employee.setDepartment(null);
         } else {
-            Department department = departmentRepository.findById(dto.getDepartmentId())
+            Department department = departmentRepository.findById(departmentId)
                     .orElseThrow(() -> new EntityNotFoundException(
-                            "Department not found: " + dto.getDepartmentId()));
+                            "Department not found: " + departmentId));
             employee.setDepartment(department);
         }
-    }
-
-    private EmployeeDto toDto(Employee employee) {
-        Long departmentId = employee.getDepartment() == null
-                ? null
-                : employee.getDepartment().getId();
-        return new EmployeeDto(
-                employee.getId(),
-                employee.getFullName(),
-                employee.getEmail(),
-                employee.getPosition(),
-                departmentId,
-                employee.getHireDate()
-        );
     }
 }

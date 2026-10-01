@@ -11,14 +11,14 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Objects;
+import lombok.ToString;
 
 @Entity
 @Table(name = "departments")
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class Department {
 
     @Id
@@ -33,24 +33,4 @@ public class Department {
     @Column(unique = true, length = 10)
     private String code;
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Department that = (Department) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(code, that.code);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, code);
-    }
-
-    @Override
-    public String toString() {
-        return "Department{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", code='" + code + '\'' +
-                '}';
-    }
 }

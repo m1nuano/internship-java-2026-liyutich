@@ -1,16 +1,4 @@
 package com.demo.senla.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class DepartmentDto {
-    private Long id;
-    private String name;
-    private String code;
+public record DepartmentDto(Long id, String name, String code) {
 }

@@ -3,6 +3,7 @@ package com.demo.senla.service;
 import com.demo.senla.dto.RequestHistoryDto;
 import com.demo.senla.entity.RequestHistory;
 import com.demo.senla.entity.TravelRequest;
+import com.demo.senla.mapping.RequestHistoryMapper;
 import com.demo.senla.repository.RequestHistoryRepository;
 import com.demo.senla.repository.TravelRequestRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,38 +20,34 @@ public class RequestHistoryService {
 
     private final RequestHistoryRepository requestHistoryRepository;
     private final TravelRequestRepository travelRequestRepository;
+    private final RequestHistoryMapper requestHistoryMapper;
 
     @Transactional(readOnly = true)
     public List<RequestHistoryDto> findAll() {
-        List<RequestHistory> historyList = requestHistoryRepository.findAll();
-        List<RequestHistoryDto> result = new ArrayList<>();
-
-        for (RequestHistory history : historyList) {
-            result.add(toDto(history));
-        }
-
-        return result;
+        return requestHistoryRepository.findAll()
+                .stream()
+                .map(requestHistoryMapper::toDto)
+                .toList();
     }
 
     @Transactional(readOnly = true)
     public RequestHistoryDto findById(Long id) {
-        return toDto(findEntity(id));
+        return requestHistoryMapper.toDto(findEntity(id));
     }
 
     public RequestHistoryDto create(RequestHistoryDto dto) {
-        RequestHistory history = new RequestHistory();
-        fillHistory(history, dto);
+        RequestHistory history = requestHistoryMapper.toEntity(dto);
+        setTravelRequest(history, dto.travelRequestId());
 
-        RequestHistory savedHistory = requestHistoryRepository.save(history);
-        return toDto(savedHistory);
+        return requestHistoryMapper.toDto(requestHistoryRepository.save(history));
     }
 
     public RequestHistoryDto update(Long id, RequestHistoryDto dto) {
         RequestHistory history = findEntity(id);
-        fillHistory(history, dto);
+        requestHistoryMapper.updateEntity(dto, history);
+        setTravelRequest(history, dto.travelRequestId());
 
-        RequestHistory savedHistory = requestHistoryRepository.save(history);
-        return toDto(savedHistory);
+        return requestHistoryMapper.toDto(requestHistoryRepository.save(history));
     }
 
     public void delete(Long id) {
@@ -64,33 +60,14 @@ public class RequestHistoryService {
                 .orElseThrow(() -> new EntityNotFoundException("Request history not found: " + id));
     }
 
-    private void fillHistory(RequestHistory history, RequestHistoryDto dto) {
-        history.setOldStatus(dto.getOldStatus());
-        history.setNewStatus(dto.getNewStatus());
-        history.setChangedAt(dto.getChangedAt());
-        history.setComment(dto.getComment());
-
-        if (dto.getTravelRequestId() == null) {
-            history.setTravelRequest(null);
-        } else {
-            TravelRequest request = travelRequestRepository.findById(dto.getTravelRequestId())
-                    .orElseThrow(() -> new EntityNotFoundException(
-                            "Travel request not found: " + dto.getTravelRequestId()));
-            history.setTravelRequest(request);
+    private void setTravelRequest(RequestHistory history, Long travelRequestId) {
+        if (travelRequestId == null) {
+            throw new IllegalArgumentException("Travel request ID is required for request history");
         }
-    }
 
-    private RequestHistoryDto toDto(RequestHistory history) {
-        Long travelRequestId = history.getTravelRequest() == null
-                ? null
-                : history.getTravelRequest().getId();
-        return new RequestHistoryDto(
-                history.getId(),
-                travelRequestId,
-                history.getOldStatus(),
-                history.getNewStatus(),
-                history.getChangedAt(),
-                history.getComment()
-        );
+        TravelRequest request = travelRequestRepository.findById(travelRequestId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Travel request not found: " + travelRequestId));
+        history.setTravelRequest(request);
     }
 }

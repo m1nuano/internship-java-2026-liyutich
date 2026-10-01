@@ -18,17 +18,18 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Table(name = "travel_requests")
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class TravelRequest {
 
     @Id
@@ -37,10 +38,12 @@ public class TravelRequest {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
+    @ToString.Exclude
     private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
+    @ToString.Exclude
     private Department department;
 
     private String destination;
@@ -77,32 +80,4 @@ public class TravelRequest {
         updatedAt = LocalDateTime.now();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        TravelRequest that = (TravelRequest) o;
-        return Objects.equals(id, that.id) && Objects.equals(employee, that.employee) && Objects.equals(department, that.department) && Objects.equals(destination, that.destination) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(purpose, that.purpose) && status == that.status && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt) && Objects.equals(estimatedCost, that.estimatedCost);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, employee, department, destination, startDate, endDate, purpose, status, createdAt, updatedAt, estimatedCost);
-    }
-
-    @Override
-    public String toString() {
-        return "TravelRequest{" +
-                "id=" + id +
-                ", employee=" + employee +
-                ", department=" + department +
-                ", destination='" + destination + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", purpose='" + purpose + '\'' +
-                ", status=" + status +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", estimatedCost=" + estimatedCost +
-                '}';
-    }
 }
