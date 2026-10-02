@@ -1,3 +1,10 @@
 spring:
   application:
     name: senla
+  datasource:
+    url: jdbc:postgresql://localhost:5432/travel_request_system
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
