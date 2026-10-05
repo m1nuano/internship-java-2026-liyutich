@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-insert-test-data
+      author: senla
+      context: "@test"
+      changes:
+        - insert:
+            tableName: departments
+            columns:
+              - column: { name: id, valueNumeric: 1001 }
+              - column: { name: name, value: Engineering }
+              - column: { name: code, value: ENG }
+        - insert:
+            tableName: employees
+            columns:
+              - column: { name: id, valueNumeric: 1001 }
+              - column: { name: full_name, value: Alex Morgan }
+              - column: { name: email, value: alex.morgan@example.com }
+              - column: { name: position, value: Software Engineer }
+              - column: { name: department_id, valueNumeric: 1001 }
+              - column: { name: hire_date, valueDate: "2022-04-11" }
+        - insert:
+            tableName: travel_requests
+            columns:
+              - column: { name: id, valueNumeric: 1001 }
+              - column: { name: employee_id, valueNumeric: 1001 }
+              - column: { name: department_id, valueNumeric: 1001 }
+              - column: { name: destination, value: Berlin }
+              - column: { name: start_date, valueDate: "2026-11-10" }
+              - column: { name: end_date, valueDate: "2026-11-14" }
+              - column: { name: purpose, value: Attend the annual engineering conference }
+              - column: { name: status, value: SUBMITTED }
+              - column: { name: created_at, valueDate: "2026-10-01T09:00:00" }
+              - column: { name: updated_at, valueDate: "2026-10-01T09:00:00" }
+              - column: { name: estimated_cost, valueNumeric: 1250.00 }
+        - insert:
+            tableName: request_history
+            columns:
+              - column: { name: id, valueNumeric: 1001 }
+              - column: { name: travel_request_id, valueNumeric: 1001 }
+              - column: { name: old_status, value: DRAFT }
+              - column: { name: new_status, value: SUBMITTED }
+              - column: { name: changed_at, valueDate: "2026-10-01T09:00:00" }
+              - column: { name: comment, value: Submitted for approval }
