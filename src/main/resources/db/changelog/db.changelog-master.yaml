@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/changes/001-create-schema.yaml
   - include:
       file: db/changelog/changes/002-test-data.yaml
+  - include:
+      file: db/changelog/changes/003-add-required-fields-and-fix-test-sequences.yaml

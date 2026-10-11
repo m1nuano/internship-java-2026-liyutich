@@ -29,8 +29,9 @@ public class Department {
     @Column(nullable = false)
     private String name;
 
+    @NotNull
     @Size(min = 3, max = 10)
-    @Column(unique = true, length = 10)
+    @Column(nullable = false, unique = true, length = 10)
     private String code;
 
 }
