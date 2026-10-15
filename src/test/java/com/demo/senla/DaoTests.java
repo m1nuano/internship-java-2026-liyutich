@@ -313,10 +313,6 @@ class DaoTests extends PostgresTest {
         List<Employee> graph = employeeRepository.findAllWithDepartment();
         List<String> graphDepartments = graph.stream().map(employee -> employee.getDepartment().getName()).sorted().toList();
         long graphQueryCount = statistics.getPrepareStatementCount();
-
-        System.out.println("Без EntityGraph: " + plainQueryCount);
-        System.out.println("С EntityGraph: " + graphQueryCount);
-
         assertEquals(plainDepartments, graphDepartments);
         assertTrue(plainQueryCount > 1);
         assertEquals(1, graphQueryCount);
