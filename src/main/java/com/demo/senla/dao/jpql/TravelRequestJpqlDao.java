@@ -19,16 +19,17 @@ public class TravelRequestJpqlDao {
 
     @Transactional(readOnly = true)
     public Page<TravelRequest> findByDepartmentCode(String departmentCode, Pageable pageable) {
-        List<TravelRequest> requests = entityManager.createQuery(
+        var query = entityManager.createQuery(
                         "select tr from TravelRequest tr join tr.department d where d.code = :code order by tr.id",
                         TravelRequest.class)
                 .setParameter("code", departmentCode)
-                .setFirstResult((int) pageable.getOffset())
-                .setMaxResults(pageable.getPageSize())
-                .getResultList();
+                .setFirstResult(Math.toIntExact(pageable.getOffset()))
+                .setMaxResults(pageable.getPageSize());
+        List<TravelRequest> requests = query.getResultList();
         Long count = entityManager.createQuery(
                         "select count(tr) from TravelRequest tr join tr.department d where d.code = :code", Long.class)
                 .setParameter("code", departmentCode).getSingleResult();
         return new PageImpl<>(requests, pageable, count);
     }
+
 }

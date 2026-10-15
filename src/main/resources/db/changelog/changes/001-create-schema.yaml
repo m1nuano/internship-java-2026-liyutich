@@ -21,6 +21,8 @@ databaseChangeLog:
               - column:
                   name: code
                   type: varchar(10)
+                  constraints:
+                    nullable: false
         - addUniqueConstraint:
             tableName: departments
             columnNames: code
@@ -48,6 +50,8 @@ databaseChangeLog:
               - column:
                   name: email
                   type: varchar(255)
+                  constraints:
+                    nullable: false
               - column:
                   name: position
                   type: varchar(255)
