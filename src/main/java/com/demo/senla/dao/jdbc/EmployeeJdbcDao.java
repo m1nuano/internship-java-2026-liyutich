@@ -38,34 +38,42 @@ public class EmployeeJdbcDao {
         }
     }
 
-    @Transactional
     public int transferToDepartment(long employeeId, long newDepartmentId) {
-        Connection connection = DataSourceUtils.getConnection(dataSource);
-        try {
-            int updatedEmployees;
-            try (PreparedStatement statement = connection.prepareStatement(
-                    "UPDATE employees SET department_id = ? WHERE id = ?")) {
-                statement.setLong(1, newDepartmentId);
-                statement.setLong(2, employeeId);
-                updatedEmployees = statement.executeUpdate();
+        try (Connection connection = dataSource.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                int updatedEmployees;
+                try (PreparedStatement statement = connection.prepareStatement(
+                        "UPDATE employees SET department_id = ? WHERE id = ?")) {
+                    statement.setLong(1, newDepartmentId);
+                    statement.setLong(2, employeeId);
+                    updatedEmployees = statement.executeUpdate();
+                }
+                if (updatedEmployees == 0) {
+                    connection.rollback();
+                    return 0;
+                }
+                try (PreparedStatement statement = connection.prepareStatement("""
+                        UPDATE travel_requests
+                        SET department_id = ?, updated_at = CURRENT_TIMESTAMP
+                        WHERE employee_id = ? AND status = 'DRAFT'
+                        """)) {
+                    statement.setLong(1, newDepartmentId);
+                    statement.setLong(2, employeeId);
+                    statement.executeUpdate();
+                }
+                connection.commit();
+                return updatedEmployees;
+            } catch (SQLException | RuntimeException e) {
+                try {
+                    connection.rollback();
+                } catch (SQLException rollbackException) {
+                    e.addSuppressed(rollbackException);
+                }
+                throw e;
             }
-            if (updatedEmployees == 0) {
-                return 0;
-            }
-            try (PreparedStatement statement = connection.prepareStatement("""
-                    UPDATE travel_requests
-                    SET department_id = ?, updated_at = CURRENT_TIMESTAMP
-                    WHERE employee_id = ? AND status = 'DRAFT'
-                    """)) {
-                statement.setLong(1, newDepartmentId);
-                statement.setLong(2, employeeId);
-                statement.executeUpdate();
-            }
-            return updatedEmployees;
         } catch (SQLException e) {
             throw new IllegalStateException("Could not transfer employee", e);
-        } finally {
-            DataSourceUtils.releaseConnection(connection, dataSource);
         }
     }
 }

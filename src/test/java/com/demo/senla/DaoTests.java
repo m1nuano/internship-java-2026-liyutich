@@ -69,34 +69,41 @@ class DaoTests extends PostgresTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     void jdbcTransfersEmployeeAndOnlyDraftRequests() {
         Long oldDepartment = createDepartment("Old Department", "OLD");
         Long newDepartment = createDepartment("New Department", "NEW");
         Long employeeId = createEmployee("Transfer Test", "transfer@example.com", oldDepartment, null);
         Long otherEmployee = createEmployee("Other Employee", "other@example.com", oldDepartment, null);
-        List<Long> requestIds = new ArrayList<>();
-        for (TravelRequestStatus status : TravelRequestStatus.values()) {
-            requestIds.add(createRequest(employeeId, oldDepartment, "Berlin", status));
-        }
-        Long otherDraft = createRequest(otherEmployee, oldDepartment, "Berlin", TravelRequestStatus.DRAFT);
-
-        assertEquals(1, employeeJdbcDao.transferToDepartment(employeeId, newDepartment));
-        assertEquals(newDepartment, employeeDepartment(employeeId));
-        for (int i = 0; i < TravelRequestStatus.values().length; i++) {
-            TravelRequestStatus status = TravelRequestStatus.values()[i];
-            Long requestId = requestIds.get(i);
-            assertEquals(status == TravelRequestStatus.DRAFT ? newDepartment : oldDepartment,
-                    requestDepartment(requestId));
-            LocalDateTime updatedAt = jdbcTemplate.queryForObject(
-                    "select updated_at from travel_requests where id = ?", LocalDateTime.class, requestId);
-            if (status == TravelRequestStatus.DRAFT) {
-                assertTrue(updatedAt.isAfter(LocalDateTime.of(2026, 1, 1, 12, 0)));
-            } else {
-                assertEquals(LocalDateTime.of(2026, 1, 1, 12, 0), updatedAt);
+        try {
+            List<Long> requestIds = new ArrayList<>();
+            for (TravelRequestStatus status : TravelRequestStatus.values()) {
+                requestIds.add(createRequest(employeeId, oldDepartment, "Berlin", status));
             }
+            Long otherDraft = createRequest(otherEmployee, oldDepartment, "Berlin", TravelRequestStatus.DRAFT);
+
+            assertEquals(1, employeeJdbcDao.transferToDepartment(employeeId, newDepartment));
+            assertEquals(newDepartment, employeeDepartment(employeeId));
+            for (int i = 0; i < TravelRequestStatus.values().length; i++) {
+                TravelRequestStatus status = TravelRequestStatus.values()[i];
+                Long requestId = requestIds.get(i);
+                assertEquals(status == TravelRequestStatus.DRAFT ? newDepartment : oldDepartment,
+                        requestDepartment(requestId));
+                LocalDateTime updatedAt = jdbcTemplate.queryForObject(
+                        "select updated_at from travel_requests where id = ?", LocalDateTime.class, requestId);
+                if (status == TravelRequestStatus.DRAFT) {
+                    assertTrue(updatedAt.isAfter(LocalDateTime.of(2026, 1, 1, 12, 0)));
+                } else {
+                    assertEquals(LocalDateTime.of(2026, 1, 1, 12, 0), updatedAt);
+                }
+            }
+            assertEquals(oldDepartment, requestDepartment(otherDraft));
+            assertEquals(0, employeeJdbcDao.transferToDepartment(-1, newDepartment));
+        } finally {
+            jdbcTemplate.update("delete from travel_requests where employee_id in (?, ?)", employeeId, otherEmployee);
+            jdbcTemplate.update("delete from employees where id in (?, ?)", employeeId, otherEmployee);
+            jdbcTemplate.update("delete from departments where id in (?, ?)", oldDepartment, newDepartment);
         }
-        assertEquals(oldDepartment, requestDepartment(otherDraft));
-        assertEquals(0, employeeJdbcDao.transferToDepartment(-1, newDepartment));
     }
 
     @Test
