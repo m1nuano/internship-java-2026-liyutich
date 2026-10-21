@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-insert-test-data
+      author: senla
+      context: "@test"
+      changes:
+        - sql:
+            splitStatements: false
+            sql: |
+              WITH new_department AS (
+                  INSERT INTO departments (name, code)
+                  VALUES ('Engineering', 'ENG')
+                  RETURNING id
+              ), new_employee AS (
+                  INSERT INTO employees (full_name, email, position, department_id, hire_date)
+                  SELECT 'Alex Morgan', 'alex.morgan@example.com', 'Software Engineer',
+                         id, DATE '2022-04-11'
+                  FROM new_department
+                  RETURNING id, department_id
+              ), new_request AS (
+                  INSERT INTO travel_requests (
+                      employee_id, department_id, destination, start_date, end_date,
+                      purpose, status, created_at, updated_at, estimated_cost
+                  )
+                  SELECT id, department_id, 'Berlin', DATE '2026-11-10', DATE '2026-11-14',
+                         'Attend the annual engineering conference', 'SUBMITTED',
+                         TIMESTAMP '2026-10-01 09:00:00', TIMESTAMP '2026-10-01 09:00:00', 1250.00
+                  FROM new_employee
+                  RETURNING id
+              )
+              INSERT INTO request_history (travel_request_id, old_status, new_status, changed_at, comment)
+              SELECT id, 'DRAFT', 'SUBMITTED', TIMESTAMP '2026-10-01 09:00:00', 'Submitted for approval'
+              FROM new_request;
