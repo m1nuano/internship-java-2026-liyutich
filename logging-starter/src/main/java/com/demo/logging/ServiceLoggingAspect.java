@@ -31,6 +31,9 @@ public class ServiceLoggingAspect {
             Object result = joinPoint.proceed();
             log.atLevel(level).log("Method: {}, result: {}", method, result);
             return result;
+        } catch (Throwable exception) {
+            log.error("Method: {} failed", method, exception);
+            throw exception;
         } finally {
             double duration = (System.nanoTime() - start) / 1_000_000.0;
             log.atLevel(level).log("Method: {}, execution time: {} ms", method, duration);

@@ -13,6 +13,7 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
 service-logging:
+  enabled: true
   level: INFO
 
 logging:
