@@ -18,6 +18,6 @@ public class PlaneTablePerClass extends TransportTablePerClass {
 
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String airline;
 }

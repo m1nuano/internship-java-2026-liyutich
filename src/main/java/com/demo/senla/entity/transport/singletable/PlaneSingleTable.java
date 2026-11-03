@@ -1,6 +1,5 @@
 package com.demo.senla.entity.transport.singletable;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +17,6 @@ public class PlaneSingleTable extends TransportSingleTable {
 
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(length = 255)
     private String airline;
 }
 

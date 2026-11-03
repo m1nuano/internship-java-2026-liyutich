@@ -80,11 +80,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({PropertyReferenceException.class, InvalidDataAccessApiUsageException.class})
     public ResponseEntity<ApiError> handleInvalidQuery(RuntimeException exception) {
+        log.warn("Invalid filter or sort property", exception);
         return response(HttpStatus.BAD_REQUEST, "Invalid filter or sort property", Map.of());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ApiError> handleConflict(DataIntegrityViolationException exception) {
+        log.warn("Data integrity conflict", exception);
         return response(HttpStatus.CONFLICT, "Data conflicts with a unique or foreign key constraint", Map.of());
     }
 

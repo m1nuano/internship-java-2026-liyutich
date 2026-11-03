@@ -20,7 +20,7 @@ public class PlaneJoined extends TransportJoined {
 
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(length = 255, nullable = false)
+    @Column(nullable = false)
     private String airline;
 }
 

@@ -28,6 +28,6 @@ public abstract class TransportTablePerClass {
 
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String name;
 }

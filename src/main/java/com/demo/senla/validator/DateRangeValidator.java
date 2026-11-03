@@ -9,6 +9,9 @@ import java.time.LocalDate;
 
 public class DateRangeValidator implements ConstraintValidator<DateRange, Object> {
 
+    private static final String START_DATE_FIELD = "startDate";
+    private static final String END_DATE_FIELD = "endDate";
+
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
         if (value == null) {
@@ -16,8 +19,8 @@ public class DateRangeValidator implements ConstraintValidator<DateRange, Object
         }
 
         try {
-            Field startField = value.getClass().getDeclaredField("startDate");
-            Field endField = value.getClass().getDeclaredField("endDate");
+            Field startField = value.getClass().getDeclaredField(START_DATE_FIELD);
+            Field endField = value.getClass().getDeclaredField(END_DATE_FIELD);
             startField.setAccessible(true);
             endField.setAccessible(true);
 
@@ -25,7 +28,7 @@ public class DateRangeValidator implements ConstraintValidator<DateRange, Object
             LocalDate endDate = (LocalDate) endField.get(value);
             return startDate == null || endDate == null || !startDate.isAfter(endDate);
         } catch (NoSuchFieldException | IllegalAccessException exception) {
-            throw new ValidationException("Cannot read startDate and endDate fields", exception);
+            throw new ValidationException("Cannot read " + START_DATE_FIELD + " and " + END_DATE_FIELD + " fields", exception);
         }
     }
 }

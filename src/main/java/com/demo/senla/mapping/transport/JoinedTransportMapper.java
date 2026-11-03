@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface JoinedTransportMapper {
+public interface JoinedTransportMapper extends TransportMapper<TransportJoined> {
 
     @Mapping(target = "type", constant = "CAR")
     @Mapping(target = "airline", ignore = true)
@@ -46,29 +46,6 @@ public interface JoinedTransportMapper {
             return toTrainDto(train);
         }
         throw new IllegalArgumentException("Unknown transport type");
-    }
-
-    default TransportJoined toEntity(TransportDto dto) {
-        return switch (dto.type()) {
-            case CAR -> {
-                if (dto.model() == null) {
-                    throw new IllegalArgumentException("model is required for CAR");
-                }
-                yield toCar(dto);
-            }
-            case PLANE -> {
-                if (dto.airline() == null) {
-                    throw new IllegalArgumentException("airline is required for PLANE");
-                }
-                yield toPlane(dto);
-            }
-            case TRAIN -> {
-                if (dto.carriageCount() == null) {
-                    throw new IllegalArgumentException("carriageCount is required for TRAIN");
-                }
-                yield toTrain(dto);
-            }
-        };
     }
 }
 
