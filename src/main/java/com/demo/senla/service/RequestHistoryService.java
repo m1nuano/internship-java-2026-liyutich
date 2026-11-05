@@ -8,6 +8,8 @@ import com.demo.senla.repository.RequestHistoryRepository;
 import com.demo.senla.repository.TravelRequestRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,15 @@ public class RequestHistoryService {
                 .stream()
                 .map(requestHistoryMapper::toDto)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<RequestHistoryDto> findAll(Long travelRequestId, Pageable pageable) {
+        if (travelRequestId == null) {
+            return requestHistoryRepository.findAll(pageable).map(requestHistoryMapper::toDto);
+        }
+        return requestHistoryRepository.findByTravelRequestId(travelRequestId, pageable)
+                .map(requestHistoryMapper::toDto);
     }
 
     @Transactional(readOnly = true)

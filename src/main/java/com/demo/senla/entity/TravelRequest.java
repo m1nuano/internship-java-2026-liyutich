@@ -1,5 +1,6 @@
 package com.demo.senla.entity;
 
+import com.demo.senla.validator.DateRange;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,6 +27,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "travel_requests")
+@DateRange
 @Getter
 @Setter
 @NoArgsConstructor
@@ -70,6 +72,9 @@ public class TravelRequest {
 
     @PrePersist
     void onCreate() {
+        if (status == null) {
+            status = TravelRequestStatus.DRAFT;
+        }
         LocalDateTime now = LocalDateTime.now();
         createdAt = now;
         updatedAt = now;

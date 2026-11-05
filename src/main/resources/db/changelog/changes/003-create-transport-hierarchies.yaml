@@ -1,0 +1,180 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-create-single-table-transports
+      author: senla
+      changes:
+        - createTable:
+            tableName: single_table_transports
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: transport_type
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: model
+                  type: varchar(255)
+              - column:
+                  name: airline
+                  type: varchar(255)
+              - column:
+                  name: carriage_count
+                  type: integer
+
+  - changeSet:
+      id: 007-create-joined-transports
+      author: senla
+      changes:
+        - createTable:
+            tableName: joined_transports
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: joined_cars
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: model
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: joined_cars
+            baseColumnNames: id
+            referencedTableName: joined_transports
+            referencedColumnNames: id
+            constraintName: fk_joined_cars_transport
+        - createTable:
+            tableName: joined_planes
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: airline
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: joined_planes
+            baseColumnNames: id
+            referencedTableName: joined_transports
+            referencedColumnNames: id
+            constraintName: fk_joined_planes_transport
+        - createTable:
+            tableName: joined_trains
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: carriage_count
+                  type: integer
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: joined_trains
+            baseColumnNames: id
+            referencedTableName: joined_transports
+            referencedColumnNames: id
+            constraintName: fk_joined_trains_transport
+
+  - changeSet:
+      id: 008-create-table-per-class-transports
+      author: senla
+      changes:
+        - createSequence:
+            sequenceName: table_per_class_transport_seq
+            startValue: 1
+            incrementBy: 1
+        - createTable:
+            tableName: table_per_class_cars
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: model
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: table_per_class_planes
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: airline
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: table_per_class_trains
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: carriage_count
+                  type: integer
+                  constraints:
+                    nullable: false
