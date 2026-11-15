@@ -1,6 +1,6 @@
 package com.demo.senla.dao.jpql;
 
-import com.demo.senla.dao.DaoTest;
+import com.demo.senla.dao.DaoTestConfig;
 import com.demo.senla.entity.TravelRequest;
 import com.demo.senla.entity.TravelRequestStatus;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class TravelRequestJpqlDaoTests extends DaoTest {
+class TravelRequestJpqlDaoTests extends DaoTestConfig {
 
     @Autowired private TravelRequestJpqlDao travelRequestJpqlDao;
 

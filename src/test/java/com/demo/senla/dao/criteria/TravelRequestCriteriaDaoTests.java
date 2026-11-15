@@ -1,10 +1,9 @@
 package com.demo.senla.dao.criteria;
 
-import com.demo.senla.dao.DaoTest;
+import com.demo.senla.dao.DaoTestConfig;
 import com.demo.senla.entity.TravelRequest;
 import com.demo.senla.entity.TravelRequestStatus;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
@@ -12,9 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class TravelRequestCriteriaDaoTests extends DaoTest {
-
-    @Autowired private TravelRequestCriteriaDao travelRequestCriteriaDao;
+class TravelRequestCriteriaDaoTests extends DaoTestConfig {
 
     @Test
     void criteriaPagesRequestsAndSupportsEmptyAndPartialFilters() {

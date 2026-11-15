@@ -1,6 +1,6 @@
 package com.demo.senla.dao.specification;
 
-import com.demo.senla.dao.DaoTest;
+import com.demo.senla.dao.DaoTestConfig;
 import com.demo.senla.entity.Employee;
 import com.demo.senla.entity.TravelRequest;
 import com.demo.senla.entity.TravelRequestStatus;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class SpecificationDaoTests extends DaoTest {
+class SpecificationDaoTests extends DaoTestConfig {
 
     @Autowired private EmployeeSpecificationDao employeeSpecificationDao;
     @Autowired private TravelRequestSpecificationDao travelRequestSpecificationDao;

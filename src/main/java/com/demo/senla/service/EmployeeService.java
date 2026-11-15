@@ -65,6 +65,9 @@ public class EmployeeService {
 
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public void transferToDepartmentJdbc(Long employeeId, Long departmentId) {
+        if (!departmentRepository.existsById(departmentId)) {
+            throw new EntityNotFoundException("Department not found: " + departmentId);
+        }
         int updatedEmployees = employeeJdbcDao.transferToDepartment(employeeId, departmentId);
         if (updatedEmployees == 0) {
             throw new EntityNotFoundException("Employee not found: " + employeeId);

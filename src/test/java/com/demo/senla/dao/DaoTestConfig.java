@@ -1,6 +1,7 @@
 package com.demo.senla.dao;
 
-import com.demo.senla.PostgresTest;
+import com.demo.senla.PostgresTestContainerConfig;
+import com.demo.senla.dao.criteria.TravelRequestCriteriaDao;
 import com.demo.senla.entity.TravelRequestStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -8,9 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public abstract class DaoTest extends PostgresTest {
+public abstract class DaoTestConfig extends PostgresTestContainerConfig {
 
     @Autowired protected JdbcTemplate jdbcTemplate;
+    @Autowired protected TravelRequestCriteriaDao travelRequestCriteriaDao;
 
     protected Long seedDepartmentId() {
         return jdbcTemplate.queryForObject("select id from departments where code = 'ENG'", Long.class);

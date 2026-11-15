@@ -1,6 +1,6 @@
 package com.demo.senla.dao.qbe;
 
-import com.demo.senla.dao.DaoTest;
+import com.demo.senla.dao.DaoTestConfig;
 import com.demo.senla.entity.Employee;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class EmployeeQbeDaoTests extends DaoTest {
+class EmployeeQbeDaoTests extends DaoTestConfig {
 
     @Autowired private EmployeeQbeDao employeeQbeDao;
 
