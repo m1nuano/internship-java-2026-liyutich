@@ -26,6 +26,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.demo</groupId>
+            <artifactId>logging-starter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>

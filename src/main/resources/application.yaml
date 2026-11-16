@@ -6,7 +6,16 @@ spring:
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: validate
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
+
+service-logging:
+  enabled: true
+  level: INFO
+
+logging:
+  level:
+    com.demo.logging: ${service-logging.level:INFO}
