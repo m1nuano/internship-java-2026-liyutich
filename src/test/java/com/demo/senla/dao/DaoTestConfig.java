@@ -1,16 +1,40 @@
 package com.demo.senla.dao;
 
-import com.demo.senla.PostgresTest;
+import com.demo.senla.PostgresTestContainerConfig;
+import com.demo.senla.dao.criteria.TravelRequestCriteriaDao;
+import com.demo.senla.dao.jdbc.EmployeeJdbcDao;
+import com.demo.senla.dao.jdbctemplate.EmployeeJdbcTemplateDao;
+import com.demo.senla.dao.jpql.TravelRequestJpqlDao;
+import com.demo.senla.dao.nativequery.DepartmentStatisticsRepository;
+import com.demo.senla.dao.qbe.EmployeeQbeDao;
+import com.demo.senla.dao.specification.EmployeeSpecificationDao;
+import com.demo.senla.dao.specification.TravelRequestSpecificationDao;
+import com.demo.senla.dao.springdata.EmployeeSpringDataDao;
 import com.demo.senla.entity.TravelRequestStatus;
+import com.demo.senla.repository.EmployeeRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public abstract class DaoTest extends PostgresTest {
+public abstract class DaoTestConfig extends PostgresTestContainerConfig {
 
     @Autowired protected JdbcTemplate jdbcTemplate;
+    @Autowired protected TravelRequestCriteriaDao travelRequestCriteriaDao;
+    @Autowired protected EmployeeJdbcDao employeeJdbcDao;
+    @Autowired protected EmployeeJdbcTemplateDao employeeJdbcTemplateDao;
+    @Autowired protected TravelRequestJpqlDao travelRequestJpqlDao;
+    @Autowired protected DepartmentStatisticsRepository departmentStatisticsRepository;
+    @Autowired protected EmployeeQbeDao employeeQbeDao;
+    @Autowired protected EmployeeSpecificationDao employeeSpecificationDao;
+    @Autowired protected TravelRequestSpecificationDao travelRequestSpecificationDao;
+    @Autowired protected EmployeeSpringDataDao employeeSpringDataDao;
+    @Autowired protected EmployeeRepository employeeRepository;
+    @Autowired protected EntityManager entityManager;
+    @Autowired protected EntityManagerFactory entityManagerFactory;
 
     protected Long seedDepartmentId() {
         return jdbcTemplate.queryForObject("select id from departments where code = 'ENG'", Long.class);

@@ -11,12 +11,15 @@ import com.demo.senla.entity.RequestHistory;
 import com.demo.senla.entity.TravelRequest;
 import com.demo.senla.entity.TravelRequestStatus;
 import com.demo.senla.mapping.TravelRequestMapper;
+import com.demo.senla.metrics.TravelRequestCreatedEvent;
+import com.demo.senla.metrics.TravelRequestStatusChangedEvent;
 import com.demo.senla.repository.DepartmentRepository;
 import com.demo.senla.repository.EmployeeRepository;
 import com.demo.senla.repository.RequestHistoryRepository;
 import com.demo.senla.repository.TravelRequestRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,6 +40,7 @@ public class TravelRequestService {
     private final TravelRequestSpecificationDao travelRequestSpecificationDao;
     private final TravelRequestJpqlDao travelRequestJpqlDao;
     private final TravelRequestCriteriaDao travelRequestCriteriaDao;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional(readOnly = true)
     public List<TravelRequestDto> findAll() {
@@ -74,7 +78,9 @@ public class TravelRequestService {
         TravelRequest request = travelRequestMapper.toEntity(dto);
         setReferences(request, dto.employeeId(), dto.departmentId());
 
-        return travelRequestMapper.toDto(travelRequestRepository.save(request));
+        TravelRequest savedRequest = travelRequestRepository.save(request);
+        eventPublisher.publishEvent(new TravelRequestCreatedEvent(savedRequest.getId()));
+        return travelRequestMapper.toDto(savedRequest);
     }
 
     public TravelRequestDto update(Long id, TravelRequestDto dto) {
@@ -94,6 +100,8 @@ public class TravelRequestService {
             history.setOldStatus(oldStatus);
             history.setNewStatus(savedRequest.getStatus());
             requestHistoryRepository.save(history);
+            eventPublisher.publishEvent(new TravelRequestStatusChangedEvent(
+                    savedRequest.getId(), oldStatus, savedRequest.getStatus()));
         }
 
         return travelRequestMapper.toDto(savedRequest);
