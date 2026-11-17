@@ -14,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EmployeeQbeDaoTests extends DaoTestConfig {
 
-    @Autowired private EmployeeQbeDao employeeQbeDao;
-
     @Test
     void qbePagesEmployeesByPartOfPositionIgnoringCase() {
         Long departmentId = seedDepartmentId();

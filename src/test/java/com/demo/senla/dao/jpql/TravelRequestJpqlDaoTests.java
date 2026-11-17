@@ -14,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TravelRequestJpqlDaoTests extends DaoTestConfig {
 
-    @Autowired private TravelRequestJpqlDao travelRequestJpqlDao;
-
     @Test
     void jpqlPagesRequestsByDepartmentCode() {
         Long extra = createRequest(seedEmployeeId(), seedDepartmentId(), "Paris", TravelRequestStatus.DRAFT);

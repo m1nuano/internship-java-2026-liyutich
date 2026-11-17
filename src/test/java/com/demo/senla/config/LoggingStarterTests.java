@@ -7,12 +7,18 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.event.Level;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.core.env.StandardEnvironment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LoggingStarterTests {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
+            .withInitializer(context -> {
+                var propertySources = context.getEnvironment().getPropertySources();
+                propertySources.remove(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME);
+                propertySources.remove(StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME);
+            })
             .withConfiguration(AutoConfigurations.of(LoggingAutoConfiguration.class));
 
     @Test

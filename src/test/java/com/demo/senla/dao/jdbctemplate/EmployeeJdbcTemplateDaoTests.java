@@ -15,8 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EmployeeJdbcTemplateDaoTests extends DaoTestConfig {
 
-    @Autowired private EmployeeJdbcTemplateDao employeeJdbcTemplateDao;
-
     @Test
     void jdbcTemplatePagesCompleteEmployeeDtosAndCreatesEmployee() {
         Long departmentId = createDepartment("Template Department", "TMPL");

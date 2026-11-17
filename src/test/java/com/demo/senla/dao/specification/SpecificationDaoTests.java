@@ -19,9 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SpecificationDaoTests extends DaoTestConfig {
 
-    @Autowired private EmployeeSpecificationDao employeeSpecificationDao;
-    @Autowired private TravelRequestSpecificationDao travelRequestSpecificationDao;
-
     @Test
     void employeeSpecificationCombinesTextDepartmentAndHireDateFilters() {
         Long departmentId = createDepartment("Specification Department", "SPEC");

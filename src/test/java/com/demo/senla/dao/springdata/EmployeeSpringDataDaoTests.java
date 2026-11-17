@@ -19,11 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EmployeeSpringDataDaoTests extends DaoTestConfig {
 
-    @Autowired private EmployeeSpringDataDao employeeSpringDataDao;
-    @Autowired private EmployeeRepository employeeRepository;
-    @Autowired private EntityManager entityManager;
-    @Autowired private EntityManagerFactory entityManagerFactory;
-
     @Test
     void springDataPagesEmployeesWithTheirDepartment() {
         Long departmentId = createDepartment("Paged Department", "PAGED");

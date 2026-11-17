@@ -11,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DepartmentStatisticsRepositoryTests extends DaoTestConfig {
 
-    @Autowired private DepartmentStatisticsRepository departmentStatisticsRepository;
-
     @Test
     void nativeQueryReturnsDepartmentCountsAndCosts() {
         var engineering = departmentStatisticsRepository.findStatistics().stream()

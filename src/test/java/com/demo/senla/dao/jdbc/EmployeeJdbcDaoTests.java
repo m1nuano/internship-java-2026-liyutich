@@ -20,8 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EmployeeJdbcDaoTests extends DaoTestConfig {
 
-    @Autowired private EmployeeJdbcDao employeeJdbcDao;
-
     @Test
     void jdbcFindsCompleteDtoAndPreservesNullableFields() {
         Long employeeId = createEmployee("Jdbc Test", "jdbc@example.com", seedDepartmentId(), "Analyst",
