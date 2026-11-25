@@ -11,6 +11,17 @@ spring:
       ddl-auto: validate
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
+  cloud:
+    openfeign:
+      client:
+        config:
+          notification-service:
+            connectTimeout: 1000
+            readTimeout: 3000
+
+notification-service:
+  enabled: true
+  url: ${NOTIFICATION_SERVICE_URL:http://localhost:8081}
 
 service-logging:
   enabled: true

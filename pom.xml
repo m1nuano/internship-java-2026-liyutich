@@ -24,9 +24,26 @@
         <testcontainers.version>2.0.5</testcontainers.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
         <springdoc.version>3.2.0</springdoc.version>
+        <spring-cloud.version>2025.1.4</spring-cloud.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.demo</groupId>
             <artifactId>logging-starter</artifactId>

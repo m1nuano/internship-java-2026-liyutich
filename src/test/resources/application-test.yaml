@@ -5,3 +5,6 @@ spring:
     properties:
       hibernate:
         generate_statistics: true
+
+notification-service:
+  enabled: false
