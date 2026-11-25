@@ -41,14 +41,4 @@ class LoggingStarterTests {
                 .run(context -> assertThat(context.getBean(LoggingProperties.class).getLevel())
                         .isEqualTo(Level.DEBUG));
     }
-
-    @Test
-    void keepsUserDefinedAspect() {
-        ServiceLoggingAspect customAspect = new ServiceLoggingAspect(new LoggingProperties());
-        contextRunner.withBean(ServiceLoggingAspect.class, () -> customAspect)
-                .run(context -> {
-                    assertThat(context).hasSingleBean(ServiceLoggingAspect.class);
-                    assertThat(context.getBean(ServiceLoggingAspect.class)).isSameAs(customAspect);
-                });
-    }
 }

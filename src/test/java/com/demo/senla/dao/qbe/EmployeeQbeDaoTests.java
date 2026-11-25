@@ -3,7 +3,6 @@ package com.demo.senla.dao.qbe;
 import com.demo.senla.dao.DaoTestConfig;
 import com.demo.senla.entity.Employee;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 

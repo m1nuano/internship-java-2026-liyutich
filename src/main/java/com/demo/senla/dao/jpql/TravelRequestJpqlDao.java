@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,7 +16,6 @@ public class TravelRequestJpqlDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Transactional(readOnly = true)
     public Page<TravelRequest> findByDepartmentCode(String departmentCode, Pageable pageable) {
         var query = entityManager.createQuery(
                         "select tr from TravelRequest tr join tr.department d where d.code = :code order by tr.id",

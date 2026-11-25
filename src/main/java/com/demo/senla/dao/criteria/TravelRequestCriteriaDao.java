@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ public class TravelRequestCriteriaDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Transactional(readOnly = true)
     public Page<TravelRequest> findByStatusAndDestination(TravelRequestStatus status, String destinationPart,
                                                         Pageable pageable) {
         var builder = entityManager.getCriteriaBuilder();

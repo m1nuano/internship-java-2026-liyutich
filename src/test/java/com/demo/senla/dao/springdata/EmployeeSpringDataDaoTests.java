@@ -2,13 +2,9 @@ package com.demo.senla.dao.springdata;
 
 import com.demo.senla.dao.DaoTestConfig;
 import com.demo.senla.entity.Employee;
-import com.demo.senla.repository.EmployeeRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
 import org.hibernate.stat.Statistics;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 

@@ -1,7 +1,5 @@
 package com.demo.senla.entity.transport.singletable;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -22,12 +20,6 @@ import lombok.Setter;
 @Table(name = "single_table_transports")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "transport_type", discriminatorType = DiscriminatorType.STRING, length = 10)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = CarSingleTable.class, name = "CAR"),
-        @JsonSubTypes.Type(value = PlaneSingleTable.class, name = "PLANE"),
-        @JsonSubTypes.Type(value = TrainSingleTable.class, name = "TRAIN")
-})
 @Getter
 @Setter
 @NoArgsConstructor
