@@ -78,10 +78,16 @@ public class GlobalExceptionHandler {
         return response(HttpStatus.BAD_REQUEST, exception.getMessage(), Map.of());
     }
 
-    @ExceptionHandler({PropertyReferenceException.class, InvalidDataAccessApiUsageException.class})
-    public ResponseEntity<ApiError> handleInvalidQuery(RuntimeException exception) {
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ApiError> handleInvalidQuery(PropertyReferenceException exception) {
         log.warn("Invalid filter or sort property", exception);
         return response(HttpStatus.BAD_REQUEST, "Invalid filter or sort property", Map.of());
+    }
+
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    public ResponseEntity<ApiError> handleInvalidDataAccess(InvalidDataAccessApiUsageException exception) {
+        log.error("Invalid data access operation", exception);
+        return response(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error", Map.of());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

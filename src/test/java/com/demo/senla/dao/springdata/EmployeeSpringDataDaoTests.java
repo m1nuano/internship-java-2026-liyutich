@@ -1,6 +1,6 @@
 package com.demo.senla.dao.springdata;
 
-import com.demo.senla.dao.DaoTest;
+import com.demo.senla.dao.DaoTestConfig;
 import com.demo.senla.entity.Employee;
 import com.demo.senla.repository.EmployeeRepository;
 import jakarta.persistence.EntityManager;
@@ -17,12 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class EmployeeSpringDataDaoTests extends DaoTest {
-
-    @Autowired private EmployeeSpringDataDao employeeSpringDataDao;
-    @Autowired private EmployeeRepository employeeRepository;
-    @Autowired private EntityManager entityManager;
-    @Autowired private EntityManagerFactory entityManagerFactory;
+class EmployeeSpringDataDaoTests extends DaoTestConfig {
 
     @Test
     void springDataPagesEmployeesWithTheirDepartment() {
