@@ -1,9 +1,8 @@
 package com.demo.senla.dao.qbe;
 
-import com.demo.senla.dao.DaoTest;
+import com.demo.senla.dao.DaoTestConfig;
 import com.demo.senla.entity.Employee;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
@@ -12,9 +11,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class EmployeeQbeDaoTests extends DaoTest {
-
-    @Autowired private EmployeeQbeDao employeeQbeDao;
+class EmployeeQbeDaoTests extends DaoTestConfig {
 
     @Test
     void qbePagesEmployeesByPartOfPositionIgnoringCase() {

@@ -1,7 +1,5 @@
 package com.demo.senla.entity.transport.joined;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,12 +17,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "joined_transports")
 @Inheritance(strategy = InheritanceType.JOINED)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = CarJoined.class, name = "CAR"),
-        @JsonSubTypes.Type(value = PlaneJoined.class, name = "PLANE"),
-        @JsonSubTypes.Type(value = TrainJoined.class, name = "TRAIN")
-})
 @Getter
 @Setter
 @NoArgsConstructor

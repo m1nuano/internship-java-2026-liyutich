@@ -19,3 +19,17 @@ service-logging:
 logging:
   level:
     com.demo.logging: ${service-logging.level:INFO}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: ${spring.application.name}
+    description: Travel request service

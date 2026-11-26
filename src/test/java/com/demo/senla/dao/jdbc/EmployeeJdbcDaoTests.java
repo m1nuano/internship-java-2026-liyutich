@@ -1,10 +1,10 @@
 package com.demo.senla.dao.jdbc;
 
-import com.demo.senla.dao.DaoTest;
+import com.demo.senla.dao.DaoTestConfig;
 import com.demo.senla.dto.EmployeeDto;
 import com.demo.senla.entity.TravelRequestStatus;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,13 +13,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-class EmployeeJdbcDaoTests extends DaoTest {
-
-    @Autowired private EmployeeJdbcDao employeeJdbcDao;
+class EmployeeJdbcDaoTests extends DaoTestConfig {
 
     @Test
     void jdbcFindsCompleteDtoAndPreservesNullableFields() {
@@ -82,7 +78,7 @@ class EmployeeJdbcDaoTests extends DaoTest {
         try {
             jdbcTemplate.execute("alter table travel_requests add constraint test_reject_draft_transfer "
                     + "check (id <> " + requestId + " or department_id = " + oldDepartment + ")");
-            assertThrows(RuntimeException.class, () -> employeeJdbcDao.transferToDepartment(employeeId, newDepartment));
+            assertThrows(DataIntegrityViolationException.class, () -> employeeJdbcDao.transferToDepartment(employeeId, newDepartment));
             assertEquals(oldDepartment, employeeDepartment(employeeId));
             assertEquals(oldDepartment, requestDepartment(requestId));
         } finally {

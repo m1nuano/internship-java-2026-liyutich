@@ -1,17 +1,14 @@
 package com.demo.senla.dao.nativequery;
 
-import com.demo.senla.dao.DaoTest;
+import com.demo.senla.dao.DaoTestConfig;
 import com.demo.senla.entity.TravelRequestStatus;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class DepartmentStatisticsRepositoryTests extends DaoTest {
-
-    @Autowired private DepartmentStatisticsRepository departmentStatisticsRepository;
+class DepartmentStatisticsRepositoryTests extends DaoTestConfig {
 
     @Test
     void nativeQueryReturnsDepartmentCountsAndCosts() {

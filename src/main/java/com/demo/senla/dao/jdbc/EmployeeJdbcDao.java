@@ -2,9 +2,12 @@ package com.demo.senla.dao.jdbc;
 
 import com.demo.senla.dto.EmployeeDto;
 import com.demo.senla.mapping.EmployeeJdbcMapper;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.jdbc.support.SQLExceptionSubclassTranslator;
+import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -17,12 +20,12 @@ import java.util.Optional;
 public class EmployeeJdbcDao {
 
     private final DataSource dataSource;
+    private final SQLExceptionTranslator exceptionTranslator = new SQLExceptionSubclassTranslator();
 
     public EmployeeJdbcDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    @Transactional(readOnly = true)
     public Optional<EmployeeDto> findById(long employeeId) {
         Connection connection = DataSourceUtils.getConnection(dataSource);
         try (PreparedStatement statement = connection.prepareStatement(
@@ -32,7 +35,7 @@ public class EmployeeJdbcDao {
                 return resultSet.next() ? Optional.of(EmployeeJdbcMapper.toDto(resultSet)) : Optional.empty();
             }
         } catch (SQLException e) {
-            throw new IllegalStateException("Could not find employee", e);
+            throw translateException("Could not find employee", e);
         } finally {
             DataSourceUtils.releaseConnection(connection, dataSource);
         }
@@ -73,7 +76,12 @@ public class EmployeeJdbcDao {
                 throw e;
             }
         } catch (SQLException e) {
-            throw new IllegalStateException("Could not transfer employee", e);
+            throw translateException("Could not transfer employee", e);
         }
+    }
+
+    private DataAccessException translateException(String task, SQLException exception) {
+        DataAccessException translated = exceptionTranslator.translate(task, null, exception);
+        return translated != null ? translated : new UncategorizedSQLException(task, null, exception);
     }
 }

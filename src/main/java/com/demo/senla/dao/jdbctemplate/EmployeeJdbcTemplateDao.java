@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,7 +19,6 @@ public class EmployeeJdbcTemplateDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Transactional(readOnly = true)
     public Page<EmployeeDto> findByDepartmentId(long departmentId, Pageable pageable) {
         String sql = """
                 SELECT id, full_name, email, position, department_id, hire_date

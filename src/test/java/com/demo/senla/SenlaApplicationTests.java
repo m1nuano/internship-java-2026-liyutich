@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class SenlaApplicationTests extends PostgresTest {
+class SenlaApplicationTests extends PostgresTestContainerConfig {
 
     @Autowired private JdbcTemplate jdbcTemplate;
     @Autowired private EmployeeJdbcDao employeeJdbcDao;
